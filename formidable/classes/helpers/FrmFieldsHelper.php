@@ -1291,6 +1291,7 @@ class FrmFieldsHelper {
 			'time',
 			'tag',
 			'password',
+			'gdpr',
 		);
 		return apply_filters( 'frm_single_input_fields', $fields );
 	}
@@ -1390,7 +1391,7 @@ class FrmFieldsHelper {
 			 * For radio buttons and dropdowns
 			 * Check if saved value equals any of the options. If not, set it as the other value.
 			 */
-			foreach ( $field['options'] as $opt_key => $opt_val ) {
+			foreach ( $field['options'] as $opt_val ) {
 				$temp_val = is_array( $opt_val ) ? $opt_val['value'] : $opt_val;
 				// Multi-select dropdowns - key is not preserved
 				if ( is_array( $field['value'] ) ) {
@@ -1404,7 +1405,7 @@ class FrmFieldsHelper {
 				} else {
 					$other_val = $field['value'];
 				}
-				unset( $opt_key, $opt_val, $temp_val );
+				unset( $opt_val, $temp_val );
 			}
 			// For multi-select dropdowns only
 			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
