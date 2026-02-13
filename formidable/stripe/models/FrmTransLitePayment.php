@@ -12,7 +12,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 * @return array
 	 */
 	public function get_defaults() {
-		$values = array(
+		return array(
 			'receipt_id'  => array(
 				'sanitize' => 'sanitize_text_field',
 				'default'  => '',
@@ -66,7 +66,6 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 				'default'  => null,
 			),
 		);
-		return $values;
 	}
 
 	/**
@@ -74,8 +73,8 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 *
 	 * @since 6.7
 	 *
-	 * @param string $from_date From date.
-	 * @param string $to_date   To date.
+	 * @param string|null $from_date From date.
+	 * @param string|null $to_date   To date.
 	 *
 	 * @return array            Contains `count` and `total`.
 	 */

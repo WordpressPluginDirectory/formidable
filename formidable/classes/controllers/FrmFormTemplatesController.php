@@ -154,11 +154,13 @@ class FrmFormTemplatesController {
 		add_action( 'admin_footer', self::class . '::render_modal' );
 		add_filter( 'frm_form_nav_list', self::class . '::append_new_template_to_nav', 10, 2 );
 
-		if ( self::is_templates_page() ) {
-			add_action( 'admin_init', self::class . '::set_form_templates_data' );
-			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
-			add_filter( 'frm_show_footer_links', '__return_false' );
+		if ( ! self::is_templates_page() ) {
+			return;
 		}
+
+		add_action( 'admin_init', self::class . '::set_form_templates_data' );
+		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+		add_filter( 'frm_show_footer_links', '__return_false' );
 	}
 
 	/**
@@ -407,7 +409,7 @@ class FrmFormTemplatesController {
 
 		$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
 
-		if ( empty( $email ) || ! is_email( $email ) ) {
+		if ( ! $email || ! is_email( $email ) ) {
 			wp_send_json_error(
 				array( 'message' => __( 'Please enter a valid email address.', 'formidable' ) ),
 				WP_Http::BAD_REQUEST
@@ -566,7 +568,8 @@ class FrmFormTemplatesController {
 				'count' => 0,
 			);
 		}
-		$special_categories['all-items']      = array(
+
+		$special_categories['all-items'] = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
 		);

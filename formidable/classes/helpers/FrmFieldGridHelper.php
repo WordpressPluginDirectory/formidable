@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldGridHelper {
 
 	/**
-	 * @var bool|string
+	 * @var bool
 	 */
 	private $parent_li;
 
@@ -36,12 +36,12 @@ class FrmFieldGridHelper {
 	private $is_frm_first;
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
 	private $field;
 
 	/**
-	 * @var FrmFieldGridHelper
+	 * @var FrmFieldGridHelper|null
 	 */
 	private $section_helper;
 
@@ -93,11 +93,13 @@ class FrmFieldGridHelper {
 			$this->active_field_size  = self::get_size_of_class( $this->field_layout_class );
 		}
 
-		if ( 'divider' === $field->type && empty( $this->nested ) ) {
-			$this->section_size      = $this->active_field_size;
-			$this->active_field_size = 0;
-			$this->section_helper    = new self( true );
+		if ( 'divider' !== $field->type || ! empty( $this->nested ) ) {
+			return;
 		}
+
+		$this->section_size      = $this->active_field_size;
+		$this->active_field_size = 0;
+		$this->section_helper    = new self( true );
 	}
 
 	/**
@@ -162,6 +164,7 @@ class FrmFieldGridHelper {
 		if ( 'end_divider' === $this->field->type ) {
 			return false;
 		}
+
 		return ! $this->can_support_current_layout() || $this->is_frm_first;
 	}
 
@@ -196,7 +199,7 @@ class FrmFieldGridHelper {
 				return 2;
 		}
 
-		if ( 0 === strpos( $class, 'frm' ) ) {
+		if ( str_starts_with( $class, 'frm' ) ) {
 			$substr = substr( $class, 3 );
 
 			if ( is_numeric( $substr ) ) {
@@ -226,16 +229,19 @@ class FrmFieldGridHelper {
 			if ( 'end_divider' === $this->field->type ) {
 				$this->maybe_close_section_helper();
 			}
+
 			return;
 		}
 
-		if ( false !== $this->parent_li ) {
-			++$this->current_field_count;
-			$this->current_list_size += $this->active_field_size;
+		if ( false === $this->parent_li ) {
+			return;
+		}
 
-			if ( 12 === $this->current_list_size ) {
-				$this->close_field_wrapper();
-			}
+		++$this->current_field_count;
+		$this->current_list_size += $this->active_field_size;
+
+		if ( 12 === $this->current_list_size ) {
+			$this->close_field_wrapper();
 		}
 	}
 
