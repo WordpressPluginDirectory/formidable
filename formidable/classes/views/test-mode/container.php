@@ -88,9 +88,28 @@ if ( ! empty( $should_show_warning ) ) {
 				}
 				?>
 				</select>
+
+				<?php
+				/**
+				 * Fires inside the enabled form actions container.
+				 *
+				 * @since 6.34
+				 *
+				 * @param array $form_actions
+				 */
+				do_action( 'frm_testmode_form_actions', $form_actions );
+				?>
 			</div>
 		</label>
 	</div>
+	<?php
+	/**
+	 * Render add-on controls inside the Test Mode container.
+	 *
+	 * @param array $form_actions The form's configured actions.
+	 */
+	do_action( 'frm_test_mode_extra_controls', $form_actions );
+	?>
 	<hr>
 	<div>
 		<label id="frm_quick_jump_label"><?php esc_html_e( 'Quick jump to page:', 'formidable' ); ?></label>
@@ -125,7 +144,7 @@ if ( ! empty( $should_show_warning ) ) {
 		<?php esc_html_e( 'Reset', 'formidable' ); ?>
 	</a>
 	<?php if ( ! empty( $should_show_upsell ) ) { ?>
-		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'test-mode' ) ); ?>" class="frm-gradient" id="frm_testmode_upgrade">
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'test-mode' ) ); ?>" class="frm-gradient" id="frm_testmode_upgrade" target="_blank" rel="noopener">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_speaker_icon', array( 'aria-hidden' => 'true' ) ); ?>
 			<?php esc_html_e( 'Unlock these powerful, time saving testing features by upgrading!', 'formidable' ); ?>
 		</a>

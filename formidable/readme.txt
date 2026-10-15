@@ -2,9 +2,9 @@
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, custom form, contact form, payment form
 Requires at least: 6.3
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 6.33
+Stable tag: 7.0
 
 The most powerful drag and drop WordPress form builder for contact forms, payment forms, calculators, quizzes, surveys, and data-driven applications.
 
@@ -265,6 +265,7 @@ Our Stripe integration helps you quickly accept credit card payments online. Our
 Our custom form and quiz builder comes with all the powerful fields that you need to create a solution-focused form, fast!
 
 * Single line text - Great for name, phone number, address, and more.
+* Name
 * Email
 * Website/URL
 * Paragraph text
@@ -277,6 +278,7 @@ Our custom form and quiz builder comes with all the powerful fields that you nee
 * HTML block - Great for custom HTML
 * Captcha for Google reCAPTCHA (invisible V2 or checkbox V2, V3), hCaptcha, or Cloudflare Turnstile.
 * GDPR - Great for compliance with General Data Protection Regulation (GDPR).
+* Address - Power it up with Google address autofill and geolocation with add-ons.
 
 Here is a list of our advanced premium fields that will come in handy:
 
@@ -298,7 +300,6 @@ Here is a list of our advanced premium fields that will come in handy:
 * Page Break
 * Embed Form - Great for reusing the same set of fields in multiple places.
 * Password Field
-* Address Field - Power it up with Google address autofill and geolocation.
 * Signature - Great for contracts and booking.
 * AI - Display AI-generated responses inside your form using OpenAI. Great for personalized results, recommendations, and dynamic content.
 
@@ -364,41 +365,86 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.33 =
-* New: A new Gated Content form action type has been added. Now you can easily give access to restricted pages, views, pdfs, and files!
-* New: A new Spam settings section has been added to Form settings. Several spam settings have been moved here. In addition this section includes a summary of Global Spam settings, and a new Include Captcha in this form setting to easily add and remove Captcha fields.
-* New: PayPal Commerce front end error messages have been improved.
-* New: A Payment Settings button has been added to the Payments list page.
-* Fix: Google Pay would use the test environment incorrectly when using PayPal Commerce.
-* Fix: A Using null as an array offset is deprecated, use an empty string instead PHP deprecated message has been fixed.
+= 7.0 =
+* Security: Additional permission checks have been added to prevent unauthorized plugin installations.
+* Security: Download URL validation has been hardened to prevent downloads from untrusted sources.
+* New: Built-in MCP support now lets AI assistants manage forms, entries, styles, actions, payments, and subscriptions.
+* New: Suspected spam can now be saved for review instead of blocking submissions.
+* New: Entries can now be marked as spam or not spam, with details about failed spam checks.
+* New: Autocomplete settings are now available in Lite.
+* New: Validation errors now include a clickable summary that focuses the input needing correction.
+* New: Default validation messages now provide guidance for email addresses, URLs, phone numbers, and numbers.
+* New: Name and Address inputs now display more specific validation errors for missing parts.
+* New: Form settings now include a GDPR section.
+* New: Style classes can now be renamed in the visual styler.
+* New: Global Settings now warns before leaving with unsaved changes.
+* New: PayPal Commerce actions now support conditional logic.
+* New: Website/URL inputs now include an option to accept international domain names.
+* New: Clicking a section header in the builder now selects the whole section.
+* New: Keyboard navigation, screen reader support, and color contrast have been improved across admin pages.
+* New: Payment connection errors now explain when the selected gateway or mode needs to be connected.
+* New: A new frm_show_clickable_field_errors filter has been added for disabling the validation error summary.
+* New: New frm_before_entry_meta_change, frm_after_entry_meta_change, and frm_entry_meta_write_failed hooks have been added for tracking entry data changes.
+* New: New frm_prepare_other_input and frm_include_other_input hooks have been added for customizing Other option text boxes.
+* New: A form can now have more than one Stripe Link action. A one-time and a recurring action each get their own Stripe intent, and each payment keeps the action that created it.
+* New: On multi-page forms, a Stripe intent is now only created when the buyer reaches the page with the payment field, so skipped pages don't leave unused intents.
+* New: Shipping details are now sent to Stripe for one-time payments when the billing name and address are filled in.
+* New: A clear error now shows when live Stripe payments are used on a page that isn't HTTPS.
+* New: The Stripe card and Link inputs now use the form style's input font, and fall back to defaults when a form has no style.
+* Performance: The builder now loads faster and uses less memory when editing large forms.
+* Performance: The form switcher, form templates page, and forms list now use faster database queries.
+* Fix: Stripe Link payments could not be retried after a failed payment.
+* Fix: Stripe Link payment descriptions could remain blank when buyers did not return after paying.
+* Fix: Stripe subscriptions could fail with a No such price error.
+* Fix: Stripe payment amounts would not refresh correctly after pricing changes.
+* Fix: The license status shown while connecting would be wrong.
+* Fix: Resetting styles would use the wrong defaults and leave Quick Settings colors unchanged.
+* Fix: Spam and form errors would reload the page instead of showing on the form when submitting with AJAX.
+* Fix: In Pro, custom validation errors would remain visible after correcting a value.
+* Fix: Single Product names and prices would not update immediately in the builder preview.
+* Fix: Selecting groups inside a section could unexpectedly clear other selections in the builder.
+* Fix: AJAX submission success messages would not receive focus for screen reader users.
+* Fix: In Pro, validation errors in repeaters would not correctly set aria-invalid.
+* Fix: Stripe Link payments can now be retried after a failure. The failed payment is marked failed, its entry is removed, and the submit button stays disabled until cleanup finishes.
+* Fix: A payment left pending by an earlier failed attempt no longer blocks a retry on the same intent.
+* Fix: Stripe Link payment descriptions are now filled in by the webhook when the buyer never returns to the site.
+* Fix: Stripe subscriptions no longer fail with a No such price error when the plan needs to be created.
+* Fix: The Stripe amount now refreshes after a conditional pricing change, and Stripe is only called when the amount actually changed.
+* Fix: A returning Stripe Link payment now uses the action saved on the payment, even if the form's settings changed after the buyer submitted.
+* Fix: Stripe webhook events that belong to another site or plugin are now ignored instead of returning errors and being passed on as handled.
+* Fix: A subscription cancel event for a subscription that isn't on this site no longer causes an error.
+* Fix: Posted Stripe client secrets are now checked against Stripe before they're trusted.
 
-= 6.32.1 =
-* Security: An issue has been fixed where requests could be manipulated to attempt form submissions using test payments instead of live payments, for Stripe, Square, and PayPal Commerce.
-* Security: An incorrect status check would allow forms to submit without errors when using PayPal Commerce to handle subscriptions in a pending approval status. Credit to Yaswanth Reddy Sunkara and WPScan for reporting the issue.
-* Security: Additional validation has been added to guarantee a PayPal Commerce Apple Pay payment has the correct status.
-* Fix: A cron job for handling overdue subscriptions would not properly get unscheduled after disconnecting Square and PayPal.
-* Fix: The PayPal Commerce test mode option would not properly update on save when the PayPal add-on was also active.
-* Fix: Email settings in payment actions would incorrectly display autofill options in Safari.
-* Options to use credit cards in PayPal Commerce subscriptions has been removed as it did not properly work.
-
-= 6.32 =
-* New: The form listing table now includes new Embeds and List Settings columns, for displaying every post and page where a form is embedded, and an added gear icon for controlling screen options.
-* New: The generated Formidable CSS file can now work from the uploads directory instead of the plugin directory. This will automatically work based on the DISALLOW_FILE_MODS constant, and can additionally be controlled using a new frm_add_css_to_uploads_dir filter.
-* New: Field errors will now get removed automatically on change events regardless of the JS validation setting.
-* Fix: The aria-describedby attribute would not update properly when a form was submitted with errors for fields with multiple inputs.
-* Fix: A small styling rule has been added to prevent HTML fields from overflowing past their container when using long strings.
-* Fix: Color pickers used on the styler page have been updated to help maintain the active color format, preventing automatic conversions from rgb to hex.
-* Fix: Validation for Square has been modified to prevent the submit button from remaining disabled when the Square inputs do not include a postal code input, which happens in some countries including Japan and Australia.
-* Fix: A cannot modify header information - headers already sent by FrmTransLiteHooksController.php:108 warning has been fixed.
-* Fix: Custom CSS saved in styles would not appear as expected after duplicating, showing additional CSS selectors for the original style.
-* Fix: A possible TypeError when calling wp_is_valid_utf8 with a null value has been fixed.
-* Fix: A new style would not properly rename when it did not yet have a style ID.
-* Fix: PayPal Commerce has been updated to prevent issues where Google Pay and Apple Pay options would not appear if the SDKs had not loaded in time.
-* Fix: PayPal Commerce orders and products were not including the payment action description setting.
-* The overdue subscription cron message will no longer get logged when there are no active subscriptions.
+= 6.35 =
+* Security: More strict sanitizing is now applied to entry key values before it gets used in the HTML of a form.
+* Security: The value that records who last saved an entry is now always set from the current user, not allowing for any custom values unless importing.
+* New: The shortcodes list now offers show options for more types, and long names are truncated so the list stays readable.
+* New: The Processor column on the Payments list page can now be sorted.
+* New: A message is now shown on the Payments list page after bulk deleting.
+* New: The required email input used for Stripe Link payments will now display a required asterisk like other required inputs.
+* New: A new frm_builder_after_field_label hook has been added for adding content after a label in the builder.
+* New: A new frm_payment_user_id filter has been added for setting which user a payment belongs to.
+* Performance: The builder now loads much faster when there are a lot of fields. Fields loaded with AJAX are now loaded in asynchronous batches.
+* Performance: The way the denylist is checked has been optimized, so spam checks are much faster when a large amount of text is submitted.
+* Performance: Pricing updates for Stripe payments are now debounced, and are skipped on pages with no payment intents.
+* Fix: A subscription would not get cancelled after it reached its Recurring Payment Limit.
+* Fix: Payment status actions could run twice for the same Stripe Link payment.
+* Fix: Multiple customer objects would get created for Stripe Link recurring payments.
+* Fix: Subscription plan details would not update after changing the trial period.
+* Fix: A Stripe Link redirect would use the URL from Form settings instead of the URL in the confirmation action that ran.
+* Fix: Square payments would not correctly follow conditional logic when two Square actions were used.
+* Fix: The wrong amount would get used when verifying a buyer with Square.
+* Fix: Connecting and disconnecting Square would go by whichever mode was active instead of the mode that was selected.
+* Fix: In Pro, the dropdown on a style card would not populate, leaving no way to delete a style or set one as the default.
+* Fix: In Pro, a section added after a partially sized field would move into the previous row after a reload.
+* Fix: Adding the frm_first layout class would not start a new row for a group.
+* Fix: A field id used in a description would not get switched when a form was duplicated or imported.
+* Fix: Creating a field with a missing or invalid options value would raise a PHP warning and store null.
+* Fix: The Embeds column would only update when a post was inserted, so it went stale when a page was updated or deleted.
+* The old hard coded widths for the frm_grid_2 through frm_grid_10 classes have been removed from the generated stylesheets, helping to reduce the file size of styles used on the front end.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.32.1 =
-This version improves Stripe, Square, and PayPal Commerce payment validation. Upgrade immediately if you are using any of these payment methods.
+= 7.0 =
+This version fixes security-related bugs. Upgrade immediately.
